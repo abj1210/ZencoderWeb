@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串编码/解码工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .password-generator {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .password-generator button{
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+        /* 基础样式 */
+        .custom-input {
+            padding: 10px 15px;             /* 内边距 */
+            font-size: 16px;                /* 字体大小 */
+            border: 2px solid #ccc;         /* 边框 */
+            border-radius: 5px;             /* 圆角 */
+            outline: none;                  /* 移除默认轮廓 */
+            width: 400px;                   /* 宽度 */
+            transition: all 0.3s ease;      /* 过渡效果 */
+        }
+
+        /* 聚焦状态 */
+        .custom-input:focus {
+            border-color: #4a90e2;          /* 聚焦时边框颜色 */
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* 阴影效果 */
+        }
+
+        /* 禁用状态 */
+        .custom-input:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .form-group label {
+            margin-right: 15px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .file-selector {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            max-width: 800px;
+        }
+        select {
+            flex: 2;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .result {
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Zencoder字符串编码/解码工具</h1>
+    <h3> 基于文字集条件概率的二进制似中文编码转换器(Ω技术路线)</h3>
+
+    <form id="processForm" th:action="@{/process}" method="post">
+        <textarea name="input" placeholder="在这里输入要编码或解码的文本..." th:text="${input}"></textarea>
+        <div class="file-selector">
+            <label for="fileSelect">选择文件:</label>
+            <select id="fileSelect" name="selectedFile" class="form-control">
+                <option value="">-- 请选择文件 --</option>
+                <option th:each="file : ${fileList}"
+                        th:value="${file}"
+                        th:text="${file}"
+                        th:selected="${selectedFile == file}">
+                </option>
+            </select>
+            <button type="submit" name="requestaction" value="pass">重新加载</button>
+        </div>
+
+
+        <div>
+            <input type="checkbox" id="aes" name="aes" th:checked="${aes}">
+            <label for="aes">启用AES加密</label>
+        </div>
+
+        <div class="form-group">
+            <label for="encryptKey">密钥:</label>
+            <input type="text" id="encryptKey" name="key" th:value="${key}" class="custom-input">
+        </div>
+        <div class="btn-group">
+            <button type="submit" name="requestaction" value="encode">Zencoder编码</button>
+            <button type="submit" name="requestaction" value="decode">Zencoder解码</button>
+        </div>
+    </form>
+
+
+    <div th:if="${result != null}">
+        <h3>结果:</h3>
+        <div class="result" th:classappend="${result.startsWith('无效的') ? 'error' : ''}" th:text="${result}"></div>
+    </div>
+</div>
+
+<div class="password-generator">
+    <h3>密码生成器</h3>
+    <div class="result" id="generatedPassword"></div>
+    <button type="button" id="generatePwBtn">生成密码</button>
+</div>
+<script>
+    document.getElementById('generatePwBtn').addEventListener('click', function() {
+
+        // 使用Fetch API发送请求
+        fetch(`/keygen?`)
+            .then(response => response.json())
+            .then(data => {
+                // 直接更新页面上的元素显示结果
+                document.getElementById('generatedPassword').textContent = data.mykey;
+            })
+            .catch(error => {
+                console.error('生成密码出错:', error);
+                document.getElementById('generatedPassword').textContent = "生成密码失败";
+            });
+    });
+
+    // 点击密码可复制到剪贴板
+    document.getElementById('generatedPassword').addEventListener('click', function() {
+        const password = this.textContent;
+        if (password) {
+            navigator.clipboard.writeText(password)
+                .then(() => alert('密码已复制到剪贴板'))
+                .catch(err => console.error('复制失败:', err));
+        }
+    });
+</script>
+<a href="https://github.com/abj1210/Zencoder">GitHub项目地址</a>
+</body>
+
+</html>
