@@ -10,26 +10,26 @@ import java.util.Stack;
  * Implements Huffman coding for data compression. This class constructs a Huffman tree
  * based on the frequency of input words and provides methods to encode and decode words
  * using the generated tree.
- *
+ * <p>
  * The Huffman tree is built using a priority queue, where nodes with lower frequencies
  * are prioritized. Each leaf node represents a word, and internal nodes represent combined
  * frequencies of their children. The tree structure enables efficient encoding and decoding
  * of words into bit streams.
- *
+ * <p>
  * The class supports tail code assignment for internal nodes, which can be used when the
  * bit stream ends prematurely during decoding. This feature requires the tree to be fully
  * initialized with tail codes.
- *
+ * <p>
  * The `getStringBitStream` method encodes a given word into a bit stream by traversing the
  * tree from the leaf node to the root. The `cutWord` method decodes a bit stream back into
  * a word by traversing the tree from the root to a leaf node. If tail code support is
  * enabled and the bit stream ends prematurely, the method returns the word associated with
  * the current node.
- *
+ * <p>
  * The nested `Node` class represents individual nodes in the Huffman tree. Each node stores
  * a word, its frequency, and references to its parent and child nodes. Nodes are comparable
  * based on their frequency, which is used to maintain the priority queue during tree construction.
- *
+ * <p>
  * This class implements the Serializable interface, allowing the Huffman tree to be serialized
  * and deserialized for storage or transmission.
  */
@@ -132,7 +132,7 @@ public class Huffman implements Serializable {
      *
      * @param word the input word to be converted into a BitStream; must exist in the nodeList
      * @return a BitStream object representing the encoded path of the word in the Huffman tree,
-     *         or null if the word does not exist in the nodeList
+     * or null if the word does not exist in the nodeList
      */
     public BitStream getStringBitStream(String word) {
         if (nodeList.containsKey(word)) {
@@ -198,11 +198,11 @@ public class Huffman implements Serializable {
      * and references to its parent and child nodes (left and right). The class implements
      * the Comparable interface to allow comparison based on frequency and is serializable
      * to support persistence or transmission of the tree structure.
-     *
+     * <p>
      * The compareTo method defines the natural ordering of nodes based on their frequency,
      * enabling their use in priority queues or sorted collections. Nodes are compared by
      * subtracting the frequency of the current node from the frequency of another node.
-     *
+     * <p>
      * Nodes can be linked together to form a binary tree structure using the addLeftSon
      * and addRightSon methods, which establish parent-child relationships between nodes.
      */

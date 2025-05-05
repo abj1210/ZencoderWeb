@@ -3,7 +3,6 @@ package org.wjx.zencoderweb.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.wjx.zencoderweb.service.EncoderService;
 
 @Component
 public class EncoderInitializer implements CommandLineRunner {
@@ -16,18 +15,16 @@ public class EncoderInitializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("初始化数据路径配置...");
         String pdir, ddir;
-        if(args.length == 0){
+        if (args.length == 0) {
             pdir = "partitioners";
             ddir = "data";
-        }
-        else if(args.length ==1){
+        } else if (args.length == 1) {
             pdir = args[0];
             ddir = "data";
-        }
-        else{
+        } else {
             pdir = args[0];
             ddir = args[1];
         }

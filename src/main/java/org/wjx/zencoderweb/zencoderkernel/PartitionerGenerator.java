@@ -1,8 +1,8 @@
 package org.wjx.zencoderweb.zencoderkernel;
 
 import org.wjx.zencoderweb.zencoderkernel.norunner.NextOneGenerator;
-import org.wjx.zencoderweb.zencoderkernel.partitioner.Partitioner;
 import org.wjx.zencoderweb.zencoderkernel.norunner.wordmap.WordMap;
+import org.wjx.zencoderweb.zencoderkernel.partitioner.Partitioner;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -12,16 +12,16 @@ import java.nio.file.Path;
  * A utility class for generating, loading, and saving Partitioner instances.
  * This class provides static methods to create a Partitioner from a dataset,
  * load a serialized Partitioner from a file, and save a Partitioner instance to a file.
- *
+ * <p>
  * The `runGenerator` method generates a Partitioner by processing a dataset and applying
  * a Huffman coding strategy based on the provided Huffman number.
- *
+ * <p>
  * The `loadPartitioner` method deserializes a Partitioner object from a specified file,
  * allowing for reuse of previously generated Partitioner instances.
- *
+ * <p>
  * The `savePartitioner` method serializes a given Partitioner object to a file,
  * enabling persistence of the Partitioner for later use.
- *
+ * <p>
  * This class is designed to facilitate the creation and management of Partitioner objects,
  * which are used for encoding and decoding data using a combination of Huffman coding
  * and word mapping techniques.
@@ -30,25 +30,26 @@ public class PartitionerGenerator {
     /**
      * Runs the generator to create a Partitioner instance based on the provided dataset,
      * Huffman number, and filename.
-     *
+     * <p>
      * This method first invokes the `runGenerator` method of `NextOneGenerator` to generate
      * a WordMap from the given dataset. If the generated WordMap is null, the method returns
      * null. Otherwise, it constructs and returns a new Partitioner instance using the WordMap,
      * Huffman number, and filename.
      *
-     * @param dataset the dataset used to generate the WordMap; must not be null or empty
+     * @param dataset       the dataset used to generate the WordMap; must not be null or empty
      * @param huffmanNumber the Huffman number required for partitioning
-     * @param filename the name of the file associated with the Partition*/
+     * @param filename      the name of the file associated with the Partition
+     */
     public static Partitioner runGenerator(String dataset, int huffmanNumber, String filename) {
         WordMap map = NextOneGenerator.runGenerator(dataset);
-        if(map == null)
+        if (map == null)
             return null;
         return new Partitioner(map, huffmanNumber, filename);
     }
 
     /**
      * Loads a serialized Partitioner object from the specified file.
-     *
+     * <p>
      * This method attempts to deserialize a Partitioner instance from the given file.
      * If the file is not found, cannot be read, or does not contain a valid serialized
      * Partitioner object, an error message will be printed to the standard error stream,
@@ -71,7 +72,7 @@ public class PartitionerGenerator {
 
     /**
      * Saves a serialized Partitioner object to a file.
-     *
+     * <p>
      * This method serializes the provided Partitioner instance and writes it to a file.
      * The file name is determined by invoking the `getFileName` method on the Partitioner object.
      * If an I/O exception occurs during the serialization process, the stack trace of the exception

@@ -17,18 +17,18 @@ import java.util.stream.Collectors;
  * using AES algorithms, as well as encoding and decoding through a custom partitioning mechanism.
  * It integrates with a Partitioner to encode and decode data into a sequence of words,
  * which can be used for obfuscation or compression purposes.
- *
+ * <p>
  * The class supports both AES-based encryption/decryption and non-AES encoding/decoding.
  * AES operations require a SecretKey and an initialization vector (IV) for security.
  * Non-AES methods rely solely on the Partitioner for encoding and decoding bit streams.
- *
+ * <p>
  * The generateKey method facilitates the creation of AES keys with specified key sizes.
  * The encrypt and decrypt methods handle AES encryption and decryption, respectively,
  * while also leveraging the Partitioner for additional encoding or decoding.
- *
+ * <p>
  * The encryptWithoutAES and decryptWithoutAES methods provide encoding and decoding
  * capabilities without involving AES encryption, relying only on the Partitioner's logic.
- *
+ * <p>
  * This class is designed for scenarios where data needs to be securely encrypted or
  * transformed into a different representation for storage or transmission.
  */
@@ -38,12 +38,12 @@ public class Zencoder {
      * Huffman trees to facilitate efficient encoding and decoding of data. It partitions a set of words into these trees,
      * where each tree is constructed using a subset of the words. Remaining words are assigned as tail codes to the first
      * tree, ensuring a balance between tree size and code length.
-     *
+     * <p>
      * This partitioner is utilized by the containing class to manage encoding and decoding operations. It provides methods
      * for encoding a sequence of words into a bit stream and decoding a bit stream back into the original sequence of words.
      * The encoding process involves probabilistic selection based on the current word and the bit stream, while the decoding
      * process reconstructs the bit stream from the sequence of words using the corresponding Huffman trees.
-     *
+     * <p>
      * The partitioner's configuration, including the number of Huffman trees and their sizes, is determined during initialization
      * based on the provided word map and partitioning parameters. This allows for efficient and flexible encoding and decoding
      * operations tailored to the specific dataset.
@@ -65,24 +65,6 @@ public class Zencoder {
     }
 
     /**
-     * Returns the name of the file associated with the partitioner used by this Zencoder instance.
-     *
-     * @return a String representing the filename associated with the partitioner
-     */
-    public String getPartitionerName(){
-        return partitioner == null ? null : partitioner.getFileName();
-    }
-    /**
-     * Sets the partitioner for this Zencoder instance.
-     * The partitioner is responsible for managing the Huffman trees and word mappings
-     * used in encoding and decoding processes. Replacing the partitioner may affect
-     * the behavior of subsequent encoding and decoding operations.
-     *
-     * @param partitioner the partitioner object to be used for managing encoding and decoding operations
-     */
-    public void setPartitioner(Partitioner partitioner){this.partitioner = partitioner;}
-
-    /**
      * Generates a secret key for AES encryption with the specified key size.
      * The method uses the KeyGenerator class to create a new AES key
      * initialized with the given key size.
@@ -98,13 +80,34 @@ public class Zencoder {
     }
 
     /**
+     * Returns the name of the file associated with the partitioner used by this Zencoder instance.
+     *
+     * @return a String representing the filename associated with the partitioner
+     */
+    public String getPartitionerName() {
+        return partitioner == null ? null : partitioner.getFileName();
+    }
+
+    /**
+     * Sets the partitioner for this Zencoder instance.
+     * The partitioner is responsible for managing the Huffman trees and word mappings
+     * used in encoding and decoding processes. Replacing the partitioner may affect
+     * the behavior of subsequent encoding and decoding operations.
+     *
+     * @param partitioner the partitioner object to be used for managing encoding and decoding operations
+     */
+    public void setPartitioner(Partitioner partitioner) {
+        this.partitioner = partitioner;
+    }
+
+    /**
      * Encrypts the provided input string using the specified encryption algorithm and secret key.
      * The method generates a random initialization vector (IV) for added security, combines it with
      * the encrypted data, and encodes the result using a partitioner-based encoding mechanism.
      *
      * @param algorithm the name of the encryption algorithm to use (e.g., "AES/CBC/PKCS5Padding")
-     * @param input the plaintext string to be encrypted
-     * @param key the secret key used for encryption, typically generated using a key generation method
+     * @param input     the plaintext string to be encrypted
+     * @param key       the secret key used for encryption, typically generated using a key generation method
      * @return the encrypted and encoded string resulting from the encryption process
      * @throws Exception if an error occurs during encryption or encoding
      */
@@ -133,10 +136,10 @@ public class Zencoder {
      * The method decodes the cipher text into a bit stream, extracts the initialization vector (IV)
      * and the actual cipher text, and then performs decryption using the provided algorithm and key.
      *
-     * @param algorithm the name of the encryption algorithm to use for decryption
-     *                  (e.g., "AES/CBC/PKCS5Padding")
+     * @param algorithm  the name of the encryption algorithm to use for decryption
+     *                   (e.g., "AES/CBC/PKCS5Padding")
      * @param cipherText the encoded cipher text to be decrypted
-     * @param key the secret key used for decryption, typically generated using a key generation method
+     * @param key        the secret key used for decryption, typically generated using a key generation method
      * @return the decrypted plaintext string resulting from the decryption process
      * @throws Exception if an error occurs during decoding, extraction, or decryption
      */
@@ -170,7 +173,7 @@ public class Zencoder {
      * @param input the plaintext string to be encrypted using the custom encoding mechanism
      * @return the encrypted string resulting from the custom encoding process
      */
-    public String encryptWithoutAES(String input){
+    public String encryptWithoutAES(String input) {
         BitStream bs = new BitStream(input.getBytes(StandardCharsets.UTF_8));
         List<String> res = partitioner.encode(bs);
         StringBuilder output = new StringBuilder();
@@ -189,7 +192,7 @@ public class Zencoder {
      * @param cipherText the encoded cipher text to be decrypted using the custom decoding mechanism
      * @return the decrypted plaintext string resulting from the custom decoding process, or null if decoding fails
      */
-    public String decryptWithoutAES(String cipherText){
+    public String decryptWithoutAES(String cipherText) {
         List<String> words = cipherText.codePoints()
                 .mapToObj(cp -> new String(Character.toChars(cp)))
                 .collect(Collectors.toList());

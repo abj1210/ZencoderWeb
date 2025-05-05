@@ -134,7 +134,7 @@
         <label for="input">在此输入</label>
         <textarea name="input" id = "input" placeholder="在这里输入要编码或解码的文本..." th:text="${input}"></textarea>
         <div class="file-selector">
-            <label for="fileSelect">选择文件:</label>
+            <label for="fileSelect">选择划分器:</label>
             <select id="fileSelect" name="selectedFile" class="form-control">
                 <option value="">-- 请选择文件 --</option>
                 <option th:each="file : ${fileList}"
@@ -143,7 +143,7 @@
                         th:selected="${selectedFile == file}">
                 </option>
             </select>
-            <button type="submit" name="requestaction" value="pass">重新加载</button>
+            <button type="submit" name="requestaction" value="pass">生成划分器</button>
         </div>
 
 

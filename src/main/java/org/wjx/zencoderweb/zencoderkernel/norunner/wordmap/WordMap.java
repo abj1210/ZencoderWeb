@@ -67,7 +67,7 @@ public class WordMap implements Serializable {
      * This method provides read-only access to the graph for further processing or analysis.
      *
      * @return a Map containing the graph structure, where keys are words (String) and values
-     *         are WordNode objects representing the nodes in the graph.
+     * are WordNode objects representing the nodes in the graph.
      */
     public Map<String, WordNode> getGraph() {
         return graph;

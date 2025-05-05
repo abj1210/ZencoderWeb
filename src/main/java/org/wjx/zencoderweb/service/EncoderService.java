@@ -6,17 +6,14 @@ import org.wjx.zencoderweb.zencoderkernel.Zencoder;
 import org.wjx.zencoderweb.zencoderkernel.partitioner.Partitioner;
 
 import javax.crypto.SecretKey;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.spec.KeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class EncoderService {
@@ -40,9 +37,10 @@ public class EncoderService {
         zencoder = new Zencoder(null);
     }
 
-    public boolean setZencoder(String selectedFile){
-        if(zencoder.getPartitionerName()!=null && zencoder.getPartitionerName().equals(selectedFile))
+    public boolean setZencoder(String selectedFile) {
+        if (zencoder.getPartitionerName() != null && zencoder.getPartitionerName().equals(selectedFile))
             return true;
+        System.out.println("正在加载新的划分器...");
         Path fullpath = directoryPath.resolve(selectedFile);
         Partitioner partitioner = PartitionerGenerator.loadPartitioner(fullpath.toString());
         if (partitioner == null) {
@@ -66,10 +64,9 @@ public class EncoderService {
 
     public String decode(String input) {
         String result = zencoder.decryptWithoutAES(input);
-        if(result == null) {
+        if (result == null) {
             return "无效的字符串";
-        }
-        else {
+        } else {
             return result;
         }
     }
@@ -82,7 +79,7 @@ public class EncoderService {
         }
     }
 
-    public String keygen(){
+    public String keygen() {
         try {
             SecretKey key = Zencoder.generateKey(256);
             return Base64.getEncoder().encodeToString(key.getEncoded());
@@ -91,16 +88,17 @@ public class EncoderService {
         }
     }
 
-    public List<String> getFiles(){
+    public List<String> getFiles() {
         List<String> fileNames = new ArrayList<>();
+        System.out.println("开始生成划分器...");
         try {
             List<String> subfolderNames = Files.list(Paths.get(dataPath.toString()))
                     .filter(Files::isDirectory)
                     .map(Path::getFileName)  // 获取文件夹名称(不带路径)
                     .map(Path::toString)    // 转换为字符串
                     .collect(Collectors.toList());
-            for(String subfolder : subfolderNames){
-                Partitioner partitioner = PartitionerGenerator.runGenerator(dataPath.resolve(subfolder).toString(), 12, subfolder+".ser");
+            for (String subfolder : subfolderNames) {
+                Partitioner partitioner = PartitionerGenerator.runGenerator(dataPath.resolve(subfolder).toString(), 12, subfolder + ".ser");
                 PartitionerGenerator.savePartitioner(partitioner, directoryPath);
                 fileNames.add(partitioner.getFileName());
             }

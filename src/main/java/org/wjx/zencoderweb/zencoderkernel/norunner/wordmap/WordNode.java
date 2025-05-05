@@ -10,11 +10,11 @@ import java.util.Map;
  * to another word and tracks the frequency of that connection. The node also keeps
  * a cumulative count of all outgoing connections for efficient access to the total
  * number of relationships established.
- *
+ * <p>
  * This class is designed to be immutable in terms of its internal data structures,
  * ensuring thread safety when accessed concurrently. It supports operations to add
  * new edges and retrieve the current state of connections.
- *
+ * <p>
  * The class implements Serializable to allow instances to be persisted or transmitted
  * across different environments while maintaining their internal state.
  */
@@ -75,7 +75,7 @@ public class WordNode implements Serializable {
      * between words in the graph structure.
      *
      * @return a Map where keys are Strings representing target words and values are Integers
-     *         indicating the frequency of connections to those words
+     * indicating the frequency of connections to those words
      */
     public Map<String, Integer> getEdges() {
         return edges;

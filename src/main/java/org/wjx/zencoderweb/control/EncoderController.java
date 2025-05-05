@@ -1,18 +1,15 @@
 package org.wjx.zencoderweb.control;
 
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.wjx.zencoderweb.service.EncoderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.wjx.zencoderweb.zencoderkernel.PartitionerGenerator;
-import org.wjx.zencoderweb.zencoderkernel.partitioner.Partitioner;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.wjx.zencoderweb.service.EncoderService;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.spec.KeySpec;
 import java.util.*;
 
 
@@ -45,45 +42,43 @@ public class EncoderController {
         String result = "";
         String operation = requestaction;
 
+        System.out.println("收到请求 " + requestaction);
+
 
         switch (requestaction) {
             case "encode":
-                if(!encoderService.setZencoder(selectedFile)) {
+                if (!encoderService.setZencoder(selectedFile)) {
                     result = "无效的划分器";
                     break;
                 }
-                if(aes != null && aes){
-                    try{
+                if (aes != null && aes) {
+                    try {
                         byte[] decodedKey = Base64.getDecoder().decode(key);
                         SecretKey enckey = new SecretKeySpec(decodedKey, "AES");
                         result = encoderService.encodeAES(input, enckey);
-                    }
-                    catch(Exception e){
+                    } catch (Exception e) {
                         result = "无效的密钥格式";
                     }
 
-                }
-                else{
+                } else {
                     result = encoderService.encode(input);
                 }
                 break;
             case "decode":
-                if(!encoderService.setZencoder(selectedFile)) {
+                if (!encoderService.setZencoder(selectedFile)) {
                     result = "无效的划分器";
                     break;
                 }
-                if(aes != null && aes){
-                    try{
+                if (aes != null && aes) {
+                    try {
                         byte[] decodedKey = Base64.getDecoder().decode(key);
                         SecretKey enckey = new SecretKeySpec(decodedKey, "AES");
                         result = encoderService.decodeAES(input, enckey);
-                    }
-                    catch(Exception e){
+                    } catch (Exception e) {
                         result = "无效的密钥格式";
                     }
 
-                }
-                else{
+                } else {
                     result = encoderService.decode(input);
                 }
                 break;
@@ -96,7 +91,7 @@ public class EncoderController {
                 result = "无效的操作类型";
         }
 
-
+        System.out.println("响应结果 " + result);
         model.addAttribute("input", input);
         model.addAttribute("result", result);
         model.addAttribute("key", key);
@@ -106,6 +101,7 @@ public class EncoderController {
         model.addAttribute("operation", operation);
         return "index";
     }
+
     @GetMapping("/keygen")
     @ResponseBody
     public Map<String, String> generatePassword() {

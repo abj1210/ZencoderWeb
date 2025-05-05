@@ -12,16 +12,16 @@ import java.util.*;
  * to facilitate efficient encoding and decoding of data. It uses a combination of Huffman coding
  * and probabilistic selection to encode a sequence of words into a bit stream and decode the bit
  * stream back into the original sequence of words.
- *
+ * <p>
  * The class initializes a list of Huffman trees based on the input word map and partitions the words
  * into these trees. Each tree is constructed using a subset of the words, and the remaining words
  * are assigned as tail codes to the first tree. This allows for efficient encoding and decoding
  * while maintaining a balance between tree size and code length.
- *
+ * <p>
  * The encoding process involves traversing the Huffman trees to determine the most likely next word
  * based on the current word and the bit stream. The decoding process reverses this by reconstructing
  * the bit stream from the sequence of words using the corresponding Huffman trees.
- *
+ * <p>
  * The class provides methods for encoding a sequence of words into a bit stream, decoding a bit stream
  * back into a sequence of words, and generating a string representation of the partitioner's state.
  */
@@ -75,9 +75,9 @@ public class Partitioner implements Serializable {
      * and divides the words from the word graph into subsets, each of which is used to build a Huffman tree.
      *
      * @param wordMap the WordMap object containing the graph of words and their connections.
-     *               The graph is expected to be a map where keys are words and values are WordNode objects.
+     *                The graph is expected to be a map where keys are words and values are WordNode objects.
      * @param hlSize  the number of Huffman trees to create. This determines how the words in the graph
-     *               are divided into subsets for constructing the Huffman trees.
+     *                are divided into subsets for constructing the Huffman trees.
      */
     public Partitioner(WordMap wordMap, int hlSize, String filename) {
         this.filename = filename;
@@ -111,7 +111,7 @@ public class Partitioner implements Serializable {
      *
      * @return a String representing the filename used by this Partitioner.
      */
-    public String getFileName(){
+    public String getFileName() {
         return filename;
     }
 
@@ -123,7 +123,7 @@ public class Partitioner implements Serializable {
      * @param bitStream the BitStream to be encoded. It represents the binary data to be processed
      *                  and transformed into a sequence of encoded strings.
      * @return a List of Strings representing the encoded output. Each string corresponds to a word
-     *         extracted from the BitStream during the encoding process.
+     * extracted from the BitStream during the encoding process.
      */
     public List<String> encode(BitStream bitStream) {
         String current = null;
@@ -143,7 +143,7 @@ public class Partitioner implements Serializable {
                     total += freq;
                 }
             }
-            if(nextWord.isEmpty()){
+            if (nextWord.isEmpty()) {
                 res.add(huffmanList[0].cutWord(bitStream, true));
                 break;
             } else {
@@ -172,7 +172,7 @@ public class Partitioner implements Serializable {
      * @param words a list of strings representing the words to be decoded. Each word is expected
      *              to have a corresponding Huffman code in the huffmanList.
      * @return a BitStream object containing the concatenated binary representation of the input words,
-     *         or null if any word in the list cannot be matched to a valid Huffman code.
+     * or null if any word in the list cannot be matched to a valid Huffman code.
      */
     public BitStream decode(List<String> words) {
         BitStream bitStream = new BitStream();

@@ -13,14 +13,14 @@ import java.util.stream.Stream;
  * The NextOneGenerator class is responsible for generating a WordMap by processing text files
  * located in a specified directory. It utilizes the WordLoader class to extract words from the
  * files and constructs a WordMap where edges represent sequential word relationships.
- *
+ * <p>
  * The runGenerator method traverses the given directory, identifies regular files, and processes
  * them to build a WordMap. Words are read sequentially, and edges are added to the WordMap based
  * on their order of appearance. The process continues until all words from the files are processed.
- *
+ * <p>
  * If an exception occurs during file traversal or word processing, it is caught and logged. The
  * generated WordMap is returned if successful; otherwise, null is returned.
- *
+ * <p>
  * This class assumes that the input files contain valid UTF-8 encoded text and that the words
  * extracted are filtered based on specific criteria (e.g., Unicode script).
  */
@@ -28,19 +28,19 @@ public class NextOneGenerator {
     /**
      * Traverses the specified directory, processes all regular files within it, and generates a WordMap
      * based on the sequential relationships between words extracted from the files.
-     *
+     * <p>
      * The method uses a WordLoader to extract words from the files, filtering them based on specific
      * criteria (e.g., Unicode script). It then constructs a WordMap where edges represent sequential
      * word relationships. The process continues until all words from the files are processed or an
      * exception occurs.
-     *
+     * <p>
      * If an exception occurs during file traversal or word processing, it is caught and logged. The
      * generated WordMap is returned if successful; otherwise, null is returned.
      *
      * @param path the path to the directory containing the input files; this should be a valid directory
      *             path with readable text files encoded in UTF-8
      * @return a WordMap instance representing the sequential relationships between words if the generation
-     *         is successful, or null if an error occurs during processing
+     * is successful, or null if an error occurs during processing
      */
     public static WordMap runGenerator(String path) {
         WordLoader wordLoader;

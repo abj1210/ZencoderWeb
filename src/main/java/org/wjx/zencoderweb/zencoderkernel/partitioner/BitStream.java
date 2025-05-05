@@ -8,17 +8,17 @@ import java.util.LinkedList;
  * Represents a stream of bits stored as a sequence of boolean values.
  * Provides methods for manipulating the bit stream, including pushing, popping,
  * appending, and converting to and from byte arrays.
- *
+ * <p>
  * The class supports operations such as retrieving the first bit, checking if the stream is empty,
  * determining the size of the stream, and cutting overlapping prefixes with another bit stream.
  * Additionally, it allows recovery of bits at the front and provides a string representation of the bit sequence.
- *
+ * <p>
  * BitStream can be initialized either as an empty stream or from a byte array, where each byte is expanded into
  * its individual bits in big-endian order.
- *
+ * <p>
  * The cut operation removes matching prefixes between two bit streams until a mismatch is found or one of the streams
  * becomes empty. The append operation transfers all bits from another bit stream to the end of this stream.
- *
+ * <p>
  * Note: The internal storage of the bit stream is implemented using a deque of boolean values.
  */
 public class BitStream {
@@ -65,7 +65,9 @@ public class BitStream {
      *
      * @return the boolean value at the front of the internal data structure, or false if the structure is empty
      */
-    public boolean front() {return data.peekFirst();}
+    public boolean front() {
+        return data.peekFirst();
+    }
 
     /**
      * Removes and returns the front element of the internal data structure.
@@ -75,9 +77,11 @@ public class BitStream {
      * the behavior depends on the implementation of the underlying deque's pollFirst method.
      *
      * @return the boolean value that was at the front of the internal data structure,
-     *         or false if the structure is empty
+     * or false if the structure is empty
      */
-    public boolean pop() {return data.pollFirst();}
+    public boolean pop() {
+        return data.pollFirst();
+    }
 
     /**
      * Checks if the internal data structure of this BitStream is empty.
@@ -85,7 +89,9 @@ public class BitStream {
      *
      * @return true if the internal data structure contains no elements, false otherwise
      */
-    public boolean isEmpty() {return this.data.isEmpty();}
+    public boolean isEmpty() {
+        return this.data.isEmpty();
+    }
 
     /**
      * Returns the number of elements in the internal data structure of this BitStream.
@@ -94,7 +100,9 @@ public class BitStream {
      *
      * @return the number of boolean values currently stored in the internal data structure
      */
-    public int size() {return this.data.size();}
+    public int size() {
+        return this.data.size();
+    }
 
     /**
      * Adds a boolean value to the end of the internal data structure.
@@ -104,7 +112,9 @@ public class BitStream {
      *
      * @param b the boolean value to be added to the internal data structure
      */
-    public void push(boolean b) {data.offerLast(b);}
+    public void push(boolean b) {
+        data.offerLast(b);
+    }
 
     /**
      * Recovers the BitStream by adding a boolean value to the front of the internal data structure.
@@ -114,7 +124,9 @@ public class BitStream {
      *
      * @param b the boolean value to be added to the front of the internal data structure
      */
-    public void recover(boolean b) {data.offerFirst(b);}
+    public void recover(boolean b) {
+        data.offerFirst(b);
+    }
 
     /**
      * Converts the internal bit-level data structure into a byte array representation.
@@ -125,7 +137,7 @@ public class BitStream {
      * data structure is consumed during this process, and its size is reduced accordingly.
      *
      * @return a byte array containing the packed representation of the internal bit stream,
-     *         where each byte corresponds to an 8-bit segment of the original data
+     * where each byte corresponds to an 8-bit segment of the original data
      */
     public byte[] toByteArray() {
         byte[] result = new byte[data.size() / 8];
