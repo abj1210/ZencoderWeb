@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,9 +123,6 @@
             border-radius: 4px;
             margin-top: 20px;
         }
-        .error {
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -134,7 +131,8 @@
     <h3> 基于文字集条件概率的二进制似中文编码转换器(Ω技术路线)</h3>
 
     <form id="processForm" th:action="@{/process}" method="post">
-        <textarea name="input" placeholder="在这里输入要编码或解码的文本..." th:text="${input}"></textarea>
+        <label for="input">在此输入</label>
+        <textarea name="input" id = "input" placeholder="在这里输入要编码或解码的文本..." th:text="${input}"></textarea>
         <div class="file-selector">
             <label for="fileSelect">选择文件:</label>
             <select id="fileSelect" name="selectedFile" class="form-control">
@@ -202,7 +200,7 @@
         }
     });
 </script>
-<a href="https://github.com/abj1210/Zencoder">GitHub项目地址</a>
+<a href="https://github.com/abj1210/ZencoderWeb">GitHub项目地址</a>
 </body>
 
 </html>
